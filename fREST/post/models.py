@@ -7,11 +7,15 @@ from django.db import models
 #from PIL import Image
 from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFit, ResizeToFill
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from fREST import settings
 
 # Create your models here.
 
-class Contry(models.Model):
+class Country(models.Model):
 	name = models.CharField(max_length=30)
 	
 	def __unicode__(self):
@@ -19,10 +23,15 @@ class Contry(models.Model):
 		
 class Sity(models.Model):
 	name = models.CharField(max_length=30)
-	contry = models.ForeignKey(Contry)
+	country = models.ForeignKey(Country)
 	
 	def __unicode__(self):
 		return self.contry + ', ' + self.name
+		
+@receiver(post_save, sender=settings.AUTH_PROFILE_MODULE)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 		
 class Category(models.Model):
 	name = models.CharField(max_length=30) 
@@ -36,17 +45,20 @@ class Image(models.Model):
 	image = ImageSpecField(source='image_original', processors=[ResizeToFit(width=1024, height=768, upscale=False)], format='JPEG', options={'quality': 60})
 	
 	def __unicode__(self):
-		return self.image_original
+		return self.image_original.url
 
 class Post(models.Model):
 	header = models.CharField(max_length=30)
 	subheader = models.CharField(max_length=30)
 	text = models.TextField()
-	images = models.ManyToManyField(Image)
-	user = models.ForeignKey(User)
+	images = models.ManyToManyField(Image, blank=True)
+	user = models.ForeignKey(User, blank=True, null=True)
 	date = models.DateTimeField(auto_now_add=True, editable=False)
 	date_edit = models.DateTimeField(auto_now=True, editable=False)
+	published = models.BooleanField(default=False)
+	category = models.ForeignKey(Category)
 	
-class Favorites(models.Model):
-	user = models.ForeignKey(User)
+class ModelUser(User):
+	sity = models.ForeignKey(Sity)
 	favorites = models.ManyToManyField(Post)
+	objects = UserManager()
