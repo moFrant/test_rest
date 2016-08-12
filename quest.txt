@@ -1,0 +1,236 @@
+Действия незарегистрированных пользователей:
+
+Регистрация нового пользователя:
+POST /users/ HTTP/1.1
+Host: wview.ru:8000
+Cache-Control: no-cache
+Postman-Token: eb65fe52-f3fe-911b-feba-77d78e769bac
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="username"
+
+user
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="password"
+
+password
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="sity"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="email"
+
+mofrant@mail.ru
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+Авторизация:
+POST /api-token-auth/ HTTP/1.1
+Host: wview.ru:8000
+Cache-Control: no-cache
+Postman-Token: 291dd498-f49f-d0ce-4fd0-64d2d431aeca
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="username"
+
+user
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="password"
+
+password
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+Ответ:
+{"token":"b069b006e03ea0dfcb1486431e59c4745f6b3ec3"}
+
+Получение списка стран:
+GET /country/ HTTP/1.1
+Host: wview.ru:8000
+Cache-Control: no-cache
+Postman-Token: 9de7313f-8e83-1bd6-a129-7d46246ac403
+
+Получение списка городов страны:
+GET /sity/ HTTP/1.1
+Host: wview.ru:8000
+Cache-Control: no-cache
+Postman-Token: 10434faf-1bab-bb66-7170-91ae4bf9e312
+
+Действия зарегистрированных пользователей:
+
+Получение списка категорий:
+GET /category/ HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token b069b006e03ea0dfcb1486431e59c4745f6b3ec3
+Cache-Control: no-cache
+Postman-Token: 2fc6df5b-e83e-fc16-9558-812a25226425
+
+¬ Получение одного поста
+
+¬ Получение тизера поста (только поля Заголовок, Подзаголовок, Текст анонса и (X)
+
+превью первого изображения)
+
+¬ Получение всех постов (лента)
+
+¬ Получение всех постов категории
+
+Добавление (с возможностью прикрепить изображения к посту):, редактирование, удаление постов:
+	Добавление картинкок для поста:
+POST /images/ HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token b069b006e03ea0dfcb1486431e59c4745f6b3ec3
+Cache-Control: no-cache
+Postman-Token: 3c476695-e29b-dcd2-8c93-d5ea0d3838ea
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image_original"; filename=""
+Content-Type:
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+	Добавление поста:
+POST /post/ HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token b069b006e03ea0dfcb1486431e59c4745f6b3ec3
+Cache-Control: no-cache
+Postman-Token: a7991b90-65fc-c1dd-d704-b10ddcbdb7eb
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="category"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="header"
+
+Заголовок
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="subheader"
+
+Подзаголовок
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+Что-то очень важное
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="user"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+	Редактирование:
+PUT /post/1 HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token 1639f4323171136ec72d9175c26567c994829cad
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: e7d3710d-615d-6310-0ba9-53df07070615
+
+{
+  "pk": 1,
+  "category": 1,
+  "header": "Заголовок",
+  "subheader": "Подзаголовок",
+  "text": "Что-то очень важное",
+  "images": [
+    1,
+    2
+  ],
+  "user": 1,
+  "date_edit": "2016-07-30T21:53:35.092812Z"
+}
+
+	Удаление:
+DELETE /post/3 HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token 1639f4323171136ec72d9175c26567c994829cad
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 4e06441c-017f-714f-4a5b-f4462e8871a4
+
+Избранное: добавление и удаление поста:
+PUT /profile/2 HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token b069b006e03ea0dfcb1486431e59c4745f6b3ec3
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: c6fdc217-e6a0-0e25-7159-0e227dcb931d
+
+{
+  "first_name": "",
+  "last_name": "",
+  "email": "mofrant@mail.ru",
+  "sity": 1,
+  "is_staff": false,
+  "is_active": true,
+  "last_login": null,
+  "date_joined": "2016-07-30T21:14:05.607707Z",
+  "favorites": [
+      1,
+      2
+      ]
+}
+
+Получение списка избранного:
+GET /profile/2 HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token b069b006e03ea0dfcb1486431e59c4745f6b3ec3
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: bb970e6f-c14e-677c-9476-2b2cbdc01460
+
+Действия администратора:
+
+Создание категорий постов:
+POST /category/ HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token 1639f4323171136ec72d9175c26567c994829cad
+Cache-Control: no-cache
+Postman-Token: 707705e8-18a1-9cce-bb4a-e0ef3438fdf2
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Новости
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+Добавление страны:
+POST /country/ HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token 1639f4323171136ec72d9175c26567c994829cad
+Cache-Control: no-cache
+Postman-Token: bf86f146-04c4-e699-ed0d-a90685cb2dba
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Российская Федерация
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+Добавление города:
+POST /sity/ HTTP/1.1
+Host: wview.ru:8000
+Authorization: Token 1639f4323171136ec72d9175c26567c994829cad
+Cache-Control: no-cache
+Postman-Token: 472e5137-0337-81fa-364e-cd4667049431
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Кунгур
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="country"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
